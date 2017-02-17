@@ -1,0 +1,50 @@
+for ($kayit = 1 ; $kayit <= $tablodaki_kayitsayisi ; $kayit++) {
+                
+            $eslesen_id = $db->query("SELECT * FROM tbl_kategoriler WHERE kategori_id = " . $kayit);
+            
+                if (!empty($eslesen_id)) {
+                    foreach($eslesen_id as $eslesen_id_row){
+        ?>
+        
+        <tr>
+            <td><input type="checkbox"></td>
+            <td><?php echo ss($eslesen_id_row["kategori_adi"]); ?></td>
+            <td><?php echo $row["kategori_tarih"]; ?></td>
+            <td>
+                <a href="<?php echo URL; ?>/admin/index.php?do=kategori_duzenle&id=<?php echo $eslesen_id_row["kategori_id"]; ?>" title="Düzenle"></a>
+
+
+                <a href="<?php echo URL; ?>/admin/index.php?do=kategori_sil&id=<?php echo $eslesen_id_row["kategori_id"]; ?>" title="Sil"></a>
+            </td>
+        </tr>
+        
+        <?php 
+            $ilk_kayit = $db->query("SELECT kategori_id FROM tbl_kategoriler ORDER BY kategori_id ASC LIMIT 1");
+            
+            foreach($ilk_kayit as $ilk_kayit_arr){
+                $ilk_kayit_arr_sayi = $ilk_kayit_arr["kategori_id"];
+            }
+            
+            $son_id = $db->query("SELECT kategori_id FROM tbl_kategoriler ORDER BY kategori_id DESC LIMIT 1");
+            
+             foreach($son_id as $son_kayit_arr_sayi){
+                 $son_kayit_arr = $son_kayit_arr_sayi["kategori_id"];
+            }          
+            
+            $kategori_id_bul = $ilk_kayit_arr_sayi;        
+            
+            for ($kategori_id_bul; $kategori_id_bul <= $son_kayit_arr ; $kategori_id_bul++) { 
+                
+            $tarama_yap = $db->query("SELECT * FROM tbl_kategoriler WHERE kategori_id = '$kategori_id_bul'");
+            foreach($tarama_yap as $tarama_yapildi){
+           ?>
+            <tr>
+                <td><input type="checkbox"></td>
+                <td><?php echo ss($tarama_yapildi["kategori_adi"]); ?></td>
+                <td><?php echo $tarama_yapildi["kategori_tarih"]; ?></td>
+                <td>
+                    <a href="<?php echo URL; ?>/admin/index.php?do=kategori_duzenle&id=<?php echo $tarama_yapildi["kategori_id"]; ?>" title="Düzenle"><img src="images/icn_edit.png" alt=""></a>
+                    <a href="<?php echo URL; ?>/admin/index.php?do=kategori_sil&id=<?php echo $tarama_yapildi["kategori_id"]; ?>" title="Sil" style="margin-left:10px"><img src="images/icn_trash.png" alt=""></a>
+                </td>
+            </tr>
+            <?php
